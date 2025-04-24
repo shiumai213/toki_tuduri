@@ -9,3 +9,4 @@ response = requests.post(url, json=data)
 
 print("ステータスコード:", response.status_code)
 print("レスポンス:", response.json())
+## 問題解決のために臨時で作ったファイルのアーカイブ。マジでなんも仕事しないのでいらない
