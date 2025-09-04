@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時綴 - AI日記アシスタント</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="app-title">🕐 時綴</h1>
+            <div class="nav-buttons">
+                <button class="nav-btn active" data-screen="chat">💬 チャット</button>
+                <button class="nav-btn" data-screen="diary-list">📖 日記一覧</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- チャット画面 -->
+        <div id="chat-screen" class="screen active">
+            <div class="screen-header">
+                <h2>AI日記アシスタント</h2>
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <span>音声認識:</span>
+                        <span id="speech-support-status" class="status">確認中...</span>
+                    </div>
+                    <div class="status-item">
+                        <span>音声合成:</span>
+                        <span id="voicevox-status" class="status">確認中...</span>
+                    </div>
+                </div>
+                <div id="voicevox-setup" class="setup-notice hidden">
+                    <p>📢 Web Speech APIを使用した音声合成機能を利用します</p>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            <p>こんにちは！今日はどんな一日でしたか？お話を聞かせてください。</p>
+                            <button class="voice-play-btn" data-text="こんにちは！今日はどんな一日でしたか？お話を聞かせてください。">🔊</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="input-row">
+                        <textarea id="chat-input" class="chat-input" placeholder="メッセージを入力してください..." rows="3"></textarea>
+                        <div class="input-buttons">
+                            <button id="voice-input-btn" class="btn btn--voice">🎤 音声入力</button>
+                            <button id="send-btn" class="btn btn--primary">送信</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-controls">
+                        <div class="speaker-control">
+                            <label for="speaker-select">話者:</label>
+                            <select id="speaker-select" class="speaker-select">
+                                <option value="1">デフォルト</option>
+                            </select>
+                        </div>
+                        <div class="chat-actions">
+                            <button id="clear-chat-btn" class="btn btn--secondary">🗑️ クリア</button>
+                            <button id="save-diary-btn" class="btn btn--success">💾 日記を保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日記一覧画面 -->
+        <div id="diary-list-screen" class="screen">
+            <div class="screen-header">
+                <h2>日記一覧</h2>
+                <div class="diary-controls">
+                    <input type="text" id="diary-search" class="search-input" placeholder="日記を検索...">
+                    <button class="btn btn--primary" onclick="startNewDiary()">✏️ 新しい日記</button>
+                </div>
+            </div>
+
+            <div id="diary-entries" class="diary-entries">
+                <div class="no-diaries">
+                    <p>まだ日記がありません。新しい日記を作成してみましょう！</p>
+                    <button class="btn btn--primary" onclick="startNewDiary()">新しい日記を書く</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ローディングオーバーレイ -->
+    <div id="loading-overlay" class="modal-overlay hidden">
+        <div class="modal-content loading-modal">
+            <div class="spinner"></div>
+            <p>処理中...</p>
+        </div>
+    </div>
+
+    <!-- 音声録音モーダル -->
+    <div id="voice-recording" class="modal-overlay hidden">
+        <div class="modal-content recording-modal">
+            <div class="recording-indicator">
+                <div class="recording-animation"></div>
+                <h3>🎤 録音中...</h3>
+                <p>お話しください</p>
+            </div>
+            <button id="stop-recording-btn" class="btn btn--error">⏹️ 停止</button>
+        </div>
+    </div>
+
+    <!-- 許可モーダル -->
+    <div id="permission-modal" class="modal-overlay hidden">
+        <div class="modal-content permission-modal">
+            <h3>🎤 マイクアクセス許可</h3>
+            <p>音声入力機能を使用するために、マイクへのアクセス許可が必要です。</p>
+            <div class="modal-buttons">
+                <button id="grant-permission-btn" class="btn btn--primary">許可する</button>
+                <button id="cancel-permission-btn" class="btn btn--secondary">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="diary-app-webspeech.js"></script>
+</body>
+</html>
